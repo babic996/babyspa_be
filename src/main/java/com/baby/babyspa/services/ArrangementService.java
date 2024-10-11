@@ -68,7 +68,8 @@ public class ArrangementService {
 		Status status = statusService.findByStatusCode(createdStatus);
 		ServicePackage servicePackage = servicePackageService.findById(createArrangementDto.getServicePackageId());
 
-		if (Objects.nonNull(createArrangementDto.getDiscountId())) {
+		if (Objects.nonNull(createArrangementDto.getDiscountId())
+				&& !Objects.equals(createArrangementDto.getDiscountId(), 0)) {
 			Discount discount = discountService.findById(createArrangementDto.getDiscountId());
 			arrangement.setDiscount(discount);
 			if (discount.isPrecentage()) {
@@ -209,8 +210,12 @@ public class ArrangementService {
 		ShortDetailsDto shortDetailsDto = new ShortDetailsDto();
 
 		shortDetailsDto.setId(arrangement.getArrangementId());
-		shortDetailsDto.setValue(arrangement.getBaby().getBabyName() + "(" + arrangement.getBaby().getPhoneNumber()
-				+ ")" + " - " + arrangement.getServicePackage().getServicePackageName());
+		shortDetailsDto.setValue(arrangement.getBaby().getBabyName()
+				+ (Objects.nonNull(arrangement.getBaby().getBabySurname())
+						? " " + arrangement.getBaby().getBabySurname()
+						: "")
+				+ "(" + arrangement.getBaby().getPhoneNumber() + ")" + " - "
+				+ arrangement.getServicePackage().getServicePackageName());
 
 		return shortDetailsDto;
 
