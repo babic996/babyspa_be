@@ -1,6 +1,8 @@
 package com.baby.babyspa.services;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,7 @@ import com.baby.babyspa.dtos.UpdateBabyDto;
 import com.baby.babyspa.exception.NotFoundException;
 import com.baby.babyspa.models.Baby;
 import com.baby.babyspa.repositories.BabyRepository;
+import com.baby.babyspa.utils.DateTimeUtil;
 
 import jakarta.transaction.Transactional;
 
@@ -81,10 +84,22 @@ public class BabyService {
 		return baby.getBabyId();
 	}
 
-	public Page<Baby> findAllByQueryParametars(String name, int page, int size) {
+	public Page<Baby> findAllByQueryParametars(String searchText, LocalDateTime start, LocalDateTime end, int page,
+			int size) {
+
+		if (Objects.isNull(start) && Objects.nonNull(end)) {
+			start = DateTimeUtil.getDateTimeFromString("1999-01-01 00:00:00");
+		} else if (Objects.nonNull(start) && Objects.isNull(end)) {
+			end = LocalDateTime.now().plusMinutes(15);
+		}
 
 		Pageable pageable = PageRequest.of(page, size);
-		return babyRepository.findAllNative(pageable);
+
+		if (Objects.isNull(start) && Objects.isNull(end)) {
+			return babyRepository.findAllNativeWithoutDate(searchText, pageable);
+		} else {
+			return babyRepository.findAllNativeWithDate(searchText, start, end, pageable);
+		}
 	}
 
 	public List<ShortDetailsDto> findAllList() {

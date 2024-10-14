@@ -1,5 +1,6 @@
 package com.baby.babyspa.services;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -91,10 +92,11 @@ public class ServicePackageService {
 		return shortDetailsDto;
 	}
 
-	public Page<ServicePackage> findAll(int page, int size) {
+	public Page<ServicePackage> findAll(int page, int size, String searchText, BigDecimal startPrice,
+			BigDecimal endPrice) {
 
 		Pageable pageable = PageRequest.of(page, size);
 
-		return servicePackageRepository.findAllNative(pageable);
+		return servicePackageRepository.findAllServicePackageNative(searchText, startPrice, endPrice, pageable);
 	}
 }

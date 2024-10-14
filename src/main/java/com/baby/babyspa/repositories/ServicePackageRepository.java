@@ -1,9 +1,12 @@
 package com.baby.babyspa.repositories;
 
+import java.math.BigDecimal;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.baby.babyspa.models.ServicePackage;
@@ -15,6 +18,13 @@ public interface ServicePackageRepository extends JpaRepository<ServicePackage, 
 
 	boolean existsByServicePackageNameAndServicePackageIdNot(String servicePackageName, int servicePackageId);
 
-	@Query(value = "SELECT * FROM service_package ORDER BY service_package_id DESC", nativeQuery = true)
-	Page<ServicePackage> findAllNative(Pageable pageable);
+	@Query(value = """
+			    SELECT * FROM service_package sp
+			    WHERE (:searchText IS NULL OR LOWER(sp.service_package_name) LIKE LOWER(CONCAT('%', :searchText, '%')))
+			    AND (sp.price BETWEEN COALESCE(:priceStart, 0) AND COALESCE(:priceEnd, 99999999) OR (:priceStart IS NULL AND :priceEnd IS NULL))
+			    ORDER BY sp.service_package_id DESC
+			""", nativeQuery = true)
+	Page<ServicePackage> findAllServicePackageNative(@Param("searchText") String searchText,
+			@Param("priceStart") BigDecimal priceStart, @Param("priceEnd") BigDecimal priceEnd, Pageable pageable);
+
 }

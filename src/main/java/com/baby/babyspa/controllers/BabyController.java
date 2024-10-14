@@ -1,9 +1,11 @@
 package com.baby.babyspa.controllers;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -82,10 +84,13 @@ public class BabyController extends BaseController {
 	}
 
 	@GetMapping("/find-all")
-	public ResponseEntity<ApiResponse<Page<Baby>>> findAllByParametars(@RequestParam(required = false) String name,
-			@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+	public ResponseEntity<ApiResponse<Page<Baby>>> findAllByParametars(
+			@RequestParam(required = false) String searchText, @RequestParam(defaultValue = "0") int page,
+			@RequestParam(defaultValue = "10") int size,
+			@DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") @RequestParam(required = false) LocalDateTime start,
+			@DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") @RequestParam(required = false) LocalDateTime end) {
 
-		return createSuccessResponse(babyService.findAllByQueryParametars(name, page, size));
+		return createSuccessResponse(babyService.findAllByQueryParametars(searchText, start, end, page, size));
 	}
 
 	@GetMapping("/find-all-list")

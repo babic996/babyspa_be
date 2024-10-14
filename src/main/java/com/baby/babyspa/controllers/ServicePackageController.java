@@ -1,5 +1,6 @@
 package com.baby.babyspa.controllers;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -93,10 +94,12 @@ public class ServicePackageController extends BaseController {
 
 	@GetMapping("/find-all")
 	public ResponseEntity<ApiResponse<Page<ServicePackage>>> findAll(@RequestParam(defaultValue = "0") int page,
-			@RequestParam(defaultValue = "10") int size) {
+			@RequestParam(defaultValue = "10") int size, @RequestParam(required = false) String searchText,
+			@RequestParam(required = false) BigDecimal startPrice,
+			@RequestParam(required = false) BigDecimal endPrice) {
 
 		try {
-			return createSuccessResponse(servicePackageService.findAll(page, size));
+			return createSuccessResponse(servicePackageService.findAll(page, size, searchText, startPrice, endPrice));
 		} catch (Exception e) {
 			return createExceptionResponse(e);
 		}
