@@ -1,5 +1,6 @@
 package com.baby.babyspa.controllers;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -87,9 +88,14 @@ public class ArrangementController extends BaseController {
 
 	@GetMapping("/find-all")
 	public ResponseEntity<ApiResponse<Page<FindAllArrangementDto>>> findAll(@RequestParam(defaultValue = "0") int page,
-			@RequestParam(defaultValue = "10") int size) {
+			@RequestParam(defaultValue = "10") int size, @RequestParam(required = false) BigDecimal startPrice,
+			@RequestParam(required = false) BigDecimal endPrice, @RequestParam(required = false) Integer statusId,
+			@RequestParam(required = false) Integer servicePackageId, @RequestParam(required = false) Integer babyId,
+			@RequestParam(required = false) Integer paymentTypeId,
+			@RequestParam(required = false) Integer remainingTerm) {
 
-		return createSuccessResponse(arrangementService.findAll(page, size));
+		return createSuccessResponse(arrangementService.findAll(page, size, babyId, statusId, servicePackageId,
+				paymentTypeId, remainingTerm, startPrice, endPrice));
 	}
 
 	@GetMapping("/find-all-list")
