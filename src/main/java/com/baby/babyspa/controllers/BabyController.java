@@ -87,10 +87,11 @@ public class BabyController extends BaseController {
 	public ResponseEntity<ApiResponse<Page<Baby>>> findAllByParametars(
 			@RequestParam(required = false) String searchText, @RequestParam(defaultValue = "0") int page,
 			@RequestParam(defaultValue = "10") int size,
-			@DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") @RequestParam(required = false) LocalDateTime start,
-			@DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") @RequestParam(required = false) LocalDateTime end) {
+			@DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") @RequestParam(required = false) LocalDateTime startRangeDate,
+			@DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") @RequestParam(required = false) LocalDateTime endRangeDate) {
 
-		return createSuccessResponse(babyService.findAllByQueryParametars(searchText, start, end, page, size));
+		return createSuccessResponse(
+				babyService.findAllByQueryParametars(searchText, startRangeDate, endRangeDate, page, size));
 	}
 
 	@GetMapping("/find-all-list")
