@@ -9,6 +9,7 @@ import com.baby.babyspa.dtos.CreateStatusDto;
 import com.baby.babyspa.dtos.UpdateStatusDto;
 import com.baby.babyspa.exception.NotFoundException;
 import com.baby.babyspa.models.Status;
+import com.baby.babyspa.models.StatusType;
 import com.baby.babyspa.repositories.StatusRepository;
 
 import jakarta.transaction.Transactional;
@@ -18,6 +19,9 @@ public class StatusService {
 
 	@Autowired
 	StatusRepository statusRepository;
+	
+	@Autowired
+	StatusTypeService statusTypeService;
 
 	public Status findById(int statusId) throws NotFoundException {
 
@@ -34,14 +38,16 @@ public class StatusService {
 	public Status save(CreateStatusDto createStatusDto) throws Exception {
 
 		Status status = new Status();
+		StatusType statusType = statusTypeService.findById(createStatusDto.getStatusTypeId());
 
-		if (statusRepository.existsByStatusNameAndStatusCode(createStatusDto.getStatusName(),
-				createStatusDto.getStatusCode())) {
+		if (statusRepository.existsByStatusNameAndStatusCodeAndStatusType(createStatusDto.getStatusName(),
+				createStatusDto.getStatusCode(), statusType)) {
 			throw new Exception("Postoji status sa ovom kombinacijom imena i koda!");
 		}
 
 		status.setStatusCode(createStatusDto.getStatusCode());
 		status.setStatusName(createStatusDto.getStatusName());
+		status.setStatusType(statusType);
 
 		return statusRepository.save(status);
 	}
@@ -49,14 +55,16 @@ public class StatusService {
 	public Status update(UpdateStatusDto updateStatusDto) throws Exception {
 
 		Status status = findById(updateStatusDto.getStatusId());
+		StatusType statusType = statusTypeService.findById(updateStatusDto.getStatusTypeId());
 
-		if (statusRepository.existsByStatusNameAndStatusCodeAndStatusIdNot(updateStatusDto.getStatusName(),
-				updateStatusDto.getStatusCode(), status.getStatusId())) {
+		if (statusRepository.existsByStatusNameAndStatusCodeAndStatusTypeAndStatusIdNot(updateStatusDto.getStatusName(),
+				updateStatusDto.getStatusCode(), statusType,status.getStatusId())) {
 			throw new Exception("Postoji status sa ovom kombinacijom imena i koda!");
 		}
 
 		status.setStatusCode(updateStatusDto.getStatusCode());
 		status.setStatusName(updateStatusDto.getStatusName());
+		status.setStatusType(statusType);
 
 		return statusRepository.save(status);
 	}

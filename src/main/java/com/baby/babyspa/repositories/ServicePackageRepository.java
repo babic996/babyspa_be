@@ -17,6 +17,9 @@ public interface ServicePackageRepository extends JpaRepository<ServicePackage, 
 	boolean existsByServicePackageName(String servicePackageName);
 
 	boolean existsByServicePackageNameAndServicePackageIdNot(String servicePackageName, int servicePackageId);
+	
+	@Query(value = "SELECT MAX(s.price) FROM service_package s", nativeQuery = true)
+    Double findMaxPrice();
 
 	@Query(value = """
 			    SELECT * FROM service_package sp

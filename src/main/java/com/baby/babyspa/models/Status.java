@@ -33,6 +33,6 @@ public class Status {
 	private String statusCode;
 
 	@ManyToOne
-	@JoinColumn(name = "status_type_id", nullable = true)
+	@JoinColumn(name = "status_type_id", nullable = false)
 	private StatusType statusType;
 }

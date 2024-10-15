@@ -104,5 +104,15 @@ public class ServicePackageController extends BaseController {
 			return createExceptionResponse(e);
 		}
 	}
+	
+	@GetMapping("/find-max-price")
+	public ResponseEntity<ApiResponse<Double>> findMaxPrice() {
+
+		try {
+			return createSuccessResponse(servicePackageService.findMaxPriceServicePackage());
+		} catch (Exception e) {
+			return createExceptionResponse(e);
+		}
+	}
 
 }

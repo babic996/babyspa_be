@@ -67,6 +67,11 @@ public class ServicePackageService {
 
 		return servicePackageRepository.save(servicePackage);
 	}
+	
+	public Double findMaxPriceServicePackage() {
+		
+		return servicePackageRepository.findMaxPrice();
+	}
 
 	@Transactional
 	public int delete(int servicePackageId) throws NotFoundException {
@@ -99,4 +104,5 @@ public class ServicePackageService {
 
 		return servicePackageRepository.findAllServicePackageNative(searchText, startPrice, endPrice, pageable);
 	}
+	
 }

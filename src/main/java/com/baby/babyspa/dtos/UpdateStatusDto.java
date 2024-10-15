@@ -26,4 +26,7 @@ public class UpdateStatusDto {
 	@NotBlank(message = "Poslali ste samo razmake")
 	@Pattern(regexp = "^(?! ).*", message = "Unijeli ste prvo razmak pa kod statusa")
 	private String statusCode;
+	
+	@NotNull(message = "Morate poslati id tipa statusa")
+	private int statusTypeId;
 }

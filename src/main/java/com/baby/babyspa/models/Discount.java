@@ -32,7 +32,7 @@ public class Discount {
 	@Column(name = "is_precentage", nullable = false)
 	private boolean isPrecentage;
 
-	@Column(name = "discount_name", nullable = true)
+	@Column(name = "discount_name", nullable = false)
 	private String discountName;
 
 }
