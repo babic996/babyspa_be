@@ -23,7 +23,7 @@ public interface ArrangementRepository extends JpaRepository<Arrangement, Intege
 			FROM arrangement a
 			JOIN status s ON a.status_id = s.status_id
 			JOIN baby b ON a.baby_id = b.baby_id
-			JOIN payment_type pt ON a.payment_type_id = pt.payment_type_id
+			LEFT JOIN payment_type pt ON a.payment_type_id = pt.payment_type_id
 			JOIN service_package sp ON a.service_package_id = sp.service_package_id
 			WHERE (:statusId IS NULL OR s.status_id = :statusId)
 			AND (:babyId IS NULL OR b.baby_id = :babyId)
